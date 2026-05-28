@@ -8,7 +8,7 @@ class BooksyWarsawSpider(scrapy.Spider):
     allowed_domains = ["pl.booksy.com", "booksy.com"]
 
     DEFAULT_START_PAGE = 1
-    DEFAULT_END_PAGE = 2
+    DEFAULT_END_PAGE = 10
     BASE_URL = (
         "https://booksy.com/pl-pl/s/3_warszawa"
     )
@@ -18,9 +18,11 @@ class BooksyWarsawSpider(scrapy.Spider):
         x_access_token=None,
         x_api_key=None,
         start_page=DEFAULT_START_PAGE,
-        end_page=DEFAULT_END_PAGE
+        end_page=DEFAULT_END_PAGE,
+        *args,
+        **kwargs
     ):
-        super().__init__()
+        super().__init__(*args, **kwargs)
 
         if not x_access_token:
             raise ValueError("x_access_token is required")
