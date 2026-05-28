@@ -4,26 +4,25 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+from typing import TypedDict
 
-
-class SalonsScraperItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
-
+class ServiceDict(TypedDict):
+    name: str
+    min_price: float | None
+    max_price: float | None
 
 class SalonItem(scrapy.Item):
-    booksy_business_id = scrapy.Field()
-    name = scrapy.Field()
-    description = scrapy.Field()
-    address = scrapy.Field()
-    district = scrapy.Field()
-    phone = scrapy.Field()
-    email = scrapy.Field()
-    facebook_link = scrapy.Field()
-    instagram_link = scrapy.Field()
-    # array where each element is dictionary with keys: name, min_price, max_price
-    services = scrapy.Field()
-    # reviews_rank in API
-    rating = scrapy.Field()
-    reviews_count = scrapy.Field()
+    booksy_business_id: int = scrapy.Field()
+    name: str = scrapy.Field()
+    description: str = scrapy.Field()
+    address: str = scrapy.Field()
+    district: str = scrapy.Field()
+    phone: str = scrapy.Field()
+    email: str = scrapy.Field()
+    facebook_link: str = scrapy.Field()
+    instagram_link: str = scrapy.Field()
+
+    services: list[ServiceDict] = scrapy.Field()
+
+    rating: float = scrapy.Field()
+    reviews_count: int = scrapy.Field()
