@@ -2,7 +2,9 @@ package denyyyys.salons_nearby.controllers
 
 import denyyyys.salons_nearby.constants.DEFAULT_PAGE_SIZE
 import denyyyys.salons_nearby.dtos.PaginatedResponse
+import denyyyys.salons_nearby.dtos.SalonDetailsDto
 import denyyyys.salons_nearby.dtos.SalonListItemDto
+import denyyyys.salons_nearby.extensions.toDetailsDto
 import denyyyys.salons_nearby.extensions.toListItemDto
 import denyyyys.salons_nearby.models.Salon
 import denyyyys.salons_nearby.repositories.SalonRepository
@@ -32,12 +34,11 @@ class SalonController(private val salonRepository: SalonRepository) {
     }
 
     @GetMapping("/{booksyBusinessId}")
-    fun getSalonByBooksyBusinessId(@PathVariable booksyBusinessId: Long): ResponseEntity<Salon> {
+    fun getSalonByBooksyBusinessId(@PathVariable booksyBusinessId: Long): ResponseEntity<SalonDetailsDto> {
         val salon = salonRepository.findByBooksyBusinessId(booksyBusinessId)
         if (salon != null) {
-            return ResponseEntity.ok(salon)
+            return ResponseEntity.ok(salon.toDetailsDto())
         }
-
         return ResponseEntity.notFound().build()
     }
 }

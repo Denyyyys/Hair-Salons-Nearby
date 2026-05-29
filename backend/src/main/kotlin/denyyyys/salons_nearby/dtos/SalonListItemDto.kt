@@ -6,5 +6,7 @@ data class SalonListItemDto(
     val address: String,
     val district: String,
     val rating: Double,
-    val reviewsCount: Int
+    val reviewsCount: Int,
+    val minPrice: Int?,
+    val maxPrice: Int?
 )
