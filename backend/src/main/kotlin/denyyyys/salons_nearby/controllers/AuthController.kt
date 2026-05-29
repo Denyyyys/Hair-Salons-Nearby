@@ -47,7 +47,7 @@ class AuthController(
 
     @PostMapping("/login")
     fun login(@RequestBody request: UserLoginRequest): ResponseEntity<Any> {
-        val user = userRepository.findByUsername(request.username)  ?: return ResponseEntity.status(401).build()
+        val user = userRepository.findByUsername(request.username)  ?: return ResponseEntity.badRequest().body(ErrorResponse("Invalid credentials"))
 
         if (!passwordEncoder.matches(request.password, user.password)) {
             return ResponseEntity.badRequest().body(ErrorResponse("Invalid credentials"))

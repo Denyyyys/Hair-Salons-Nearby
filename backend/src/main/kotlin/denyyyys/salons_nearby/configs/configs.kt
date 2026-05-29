@@ -1,5 +1,6 @@
 package denyyyys.salons_nearby.configs
 
+import denyyyys.salons_nearby.filters.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -7,12 +8,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
-
-@Bean
-fun passwordEncoder() = BCryptPasswordEncoder()
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
-class SecurityConfig {
+class SecurityConfig(private val jwtAuthenticationFilter: JwtAuthenticationFilter) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
@@ -46,6 +45,10 @@ class SecurityConfig {
 
                 it.anyRequest().authenticated()
             }
+            .addFilterBefore(
+                jwtAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter::class.java
+            )
 
         return http.build()
     }

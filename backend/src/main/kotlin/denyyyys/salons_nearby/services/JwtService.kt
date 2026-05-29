@@ -28,4 +28,46 @@ class JwtService {
             .signWith(Keys.hmacShaKeyFor(secret.toByteArray()))
             .compact()
     }
+
+    fun extractUsername(token: String): String {
+        if (secret == null) {
+            throw RuntimeException("JWT Secret cannot null");
+        }
+
+        return Jwts.parser()
+            .verifyWith(Keys.hmacShaKeyFor(secret.toByteArray()))
+            .build()
+            .parseSignedClaims(token)
+            .payload
+            .subject
+    }
+
+    fun extractRole(token: String): String {
+        if (secret == null) {
+            throw RuntimeException("JWT Secret cannot null");
+        }
+
+        return Jwts.parser()
+            .verifyWith(Keys.hmacShaKeyFor(secret.toByteArray()))
+            .build()
+            .parseSignedClaims(token)
+            .payload["role"] as String
+    }
+
+    fun validateToken(token: String): Boolean {
+        if (secret == null) {
+            throw RuntimeException("JWT Secret cannot null");
+        }
+
+        try {
+            Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(secret.toByteArray()))
+                .build()
+                .parseSignedClaims(token)
+
+            return true
+        } catch (e: Exception) {
+            return false
+        }
+    }
 }
