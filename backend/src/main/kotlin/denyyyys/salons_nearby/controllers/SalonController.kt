@@ -26,8 +26,18 @@ import org.springframework.web.bind.annotation.RestController
 class SalonController(private val salonRepository: SalonRepository) {
 
     @GetMapping
-    fun getAllSalons(@RequestParam(defaultValue = "1") page: Int): PaginatedResponse<SalonListItemDto> {
-        val result = salonRepository.findAll(PageRequest.of(page - 1, DEFAULT_PAGE_SIZE))
+    fun getAllSalons(@RequestParam(defaultValue = "1") page: Int, @RequestParam(required = false) name: String?): PaginatedResponse<SalonListItemDto> {
+        val pageable = PageRequest.of(page - 1, DEFAULT_PAGE_SIZE)
+
+        val result =
+            if (name.isNullOrBlank()) {
+                salonRepository.findAll(pageable)
+            } else {
+                salonRepository.findByNameContainingIgnoreCase(
+                    name,
+                    pageable
+                )
+            }
 
         return PaginatedResponse(
             items = result.content.map { it.toListItemDto() },
