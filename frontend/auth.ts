@@ -47,3 +47,8 @@ export function getUsernameFromToken(token: string): string | null {
   const payload = decodeJwt(token);
   return payload?.sub ?? null;
 }
+
+export function getRoleFromToken(token: string): string | null {
+  const payload = decodeJwt(token);
+  return payload?.role ?? null;
+}
