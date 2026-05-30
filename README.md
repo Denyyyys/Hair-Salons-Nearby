@@ -1,111 +1,195 @@
-# general setup
-create .env file - for fast testing - copy everything from .env.dev to that file
-you have to have docker installed on your machine with docker compose
+# Warsaw Beauty Salon Explorer
+
+Home task for **SumUp Warsaw Accelerator Program - Software Engineer Intern**.
+
+This repository contains a full working application with:
+- data collection (`data-collection/`)
+- backend API (`backend/`)
+- frontend UI (`frontend/`)
+
+The project is focused on Warsaw hair/beauty salons and covers the flow end-to-end: scrape -> store -> expose API -> browse and edit in UI.
+
+## Stack
+
+- Data collection: `Python`, `Scrapy`, `PyMongo`
+- Backend: `Kotlin`, `Spring Boot`, `Spring Security`, `MongoDB`, `JWT`
+- Frontend: `Next.js`, `TypeScript`, `Axios`, `Tailwind CSS`, `react-toastify`
+- Infra/runtime: `Docker Compose`
+
+## Repository Structure
+
+- `data-collection/` scraper for Booksy data
+- `backend/` REST API + auth/authorization
+- `frontend/` Next.js application
+- `docker-compose.yml` services: MongoDB, Mongo Express, backend, frontend
+
+## Features Implemented
+
+### Part 1 - Data Collection
+
+- Scrapes Warsaw beauty/hair salons from Booksy
+- Stores results in MongoDB (`salons.salons` collection)
+- Uses upsert by `booksy_business_id` to avoid exact duplicates on re-runs
+- Collects:
+  - name
+  - address
+  - district
+  - phone (when available)
+  - email / social links (when available)
+  - services
+  - rating + reviews count
+  - price information per service (used later for list min/max price)
+
+Notes:
+- Scraper is intentionally not containerized in this project because this is a one-time/manual ingestion workflow.
 
 
-# data collection
-if you want to collect data using scraper on your own - you should have python installed firstly. 
+### Part 2 - Backend API
 
-then inside `data-collection` folder run:
+Exposed endpoints:
+
+- `GET /api/salons?page=1&name=&district=&serviceType=`
+  - paginated list with key fields
+- `GET /api/salons/{booksyBusinessId}`
+  - full salon details
+- `PUT /api/salons/{booksyBusinessId}`
+  - full update of editable salon fields
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+
+Authorization model:
+- public read access (`GET`)
+- `PUT /api/salons/**` requires JWT with role `ADMIN`
+- newly registered users get role `USER` by default
+- admin role is assigned manually in DB (intentional security choice for this assignment)
+
+### Part 3 - Frontend UI
+
+- Listing page with salon cards
+- Pagination
+- Filters: name, district, service type
+- Salon details page
+- Auth pages: register/login
+- JWT persisted in local storage
+- Navbar reflects auth state (`Login/Register` vs `Hello, {username}/Logout`)
+- Edit salon page:
+  - only admins can access edit form
+  - non-admins see access denied message
+  - full editable form including dynamic services
+  - update request sent to backend
+  - success/error notifications via toast
+
+## How to Run
+
+## 1) Prerequisites
+
+- Docker + Docker Compose installed
+- Create `.env` in repository root (for quick local setup you can copy `.env.dev`)
+
+Required env values:
+- `MONGO_INITDB_ROOT_USERNAME`
+- `MONGO_INITDB_ROOT_PASSWORD`
+- `MONGO_PORT`
+- `JWT_SECRET`
+
+## 2) Start app stack (DB + backend + frontend)
+
+From repository root:
 
 ```bash
-python -m venv venv - create venv
+docker compose up -d --build
 ```
 
+Services:
+- Frontend: `http://localhost:3000`
+- Backend: `http://localhost:8085`
+- Mongo Express: `http://localhost:8081`
+
+## 3) Run scraper manually
+
+Scraper is run manually, not by compose.
+
+1. Ensure MongoDB is running (from compose)
+2. In new terminal:
+
+```bash
+cd data-collection
+python -m venv venv
+```
+
+Activate venv:
+
+- PowerShell:
+```powershell
 .\venv\Scripts\Activate.ps1
+```
+- CMD:
+```cmd
 .\venv\Scripts\activate
+```
+- Linux/macOS:
+```bash
 source venv/bin/activate
+```
 
-Common PowerShell issue
+Install dependencies:
 
-Sometimes PowerShell blocks scripts with an error like:
-
-running scripts is disabled on this system
-
-Fix (current user only):
-
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-
-
+```bash
 pip install -r requirements.txt
-
-
-scraping booksy is better that google maps - i can get more data about each salon, also it would be faster than creating grid over google maps and then make request for each "cell" since this approach would take less time meaning that i can focus more on frontend or backend
-
-decided to store to json since info about salons is usually very nested and json is good for storing this kind of data
-
-## scraping process
-so I manually navigated through booksy page and checked hair salons and detected that the URL for this is: https://booksy.com/pl-pl/s/fryzjer/3_warszawa. I also figured out that there is pagination (each page only lists up to 20 results), so i have to go to next pages for scraping all data - i noticed that when i go to the next page, URL parameter with name businessesPage is added, so if i go to the 4th page i go to the URL:
-https://booksy.com/pl-pl/s/fryzjer/3_warszawa?businessesPage=4
-
-also i inspected HTML, noticed that results are stored inside the div with id search-results, and each element is <li> elements inside of it, i inspected more html in order to understand how to get data which i need:
-image URL - 
-name - (sometimes from scraped items it has part of address, sometimes not - decided to leave it as it is, since i guess that bussiness owners want to have it in their URL)
-address 
-
-but it's not full data - i noticed that for exmaple there is no phone number, but after going to specific page for each salon, for example for Beauty Spot Ursynów URL looks like this:
-https://booksy.com/pl-pl/82394_beauty-spot-ursynow_fryzjer_3_warszawa#ba_s=sr_1
-
-I see more info, but they don't appear immediately after getting page - firstly it's only visible for logged in users (for not logged in users it showed message "Zaloguj się lub załóż konto na Booksy, aby skontaktować się z usługodawcą") and is rendered with a bit of delay, which was, as my suggestion, caused since frontend of Booksy is written in a way, that it fetches some resources using JS - so I used chrome developer tools to see what kind of requests are done when page was loading and after inspection one specific catched my eye - the one having structure like this https://pl.booksy.com/core/v2/customer_api/businesses/{business_id} - in the response i noticed that there is JSON object with structured data of business data, full_address, district (referred in document as neighborhood), phone number, and others - i also noticed trying to fetching this endpoint in postman that i get response if providing X-Api-Key header, but if i don't add X-Access-Token header - then i don't get all info (like phone number is absent), so after this analysis I could start writing my scrapper. So the final process would be following:
-1. go to main page for hair salons in Warsaw and get list of results
-2. 
-
-
-## run scraper
-
-cd .\data-collection\salons_scraper\
-
-scrapy crawl booksy -a session_cookie=abc123
-
-scrapy crawl booksy -a start_page=1 -a end_page=5
-
-scrapy crawl booksy -a all_pages=true
-
-
-scrapy crawl booksy_warsaw -a x_access_token="kHJEKBG6vwTtQEN8KivFvVHRcc9E5SEo" -a x_api_key="web-e3d812bf-d7a2-445d-ab38-55589ae6a121"
-
-## what would add
-more scraped data
-more 
-
-
-# backend
-
-
-## what would add
-possibility for bussiness owners to edit info about their own businesses or at least possibility for them to send admin a request about changing data about their business (for example email or contact phone number changed). 
-
-
-## add info
-only user with role admin can modify info about salon - when every user registers, it automatically gets role = "USER", so admin manually has to update his / her record in db and update its role to "ADMIN" - it requires manual actions, but it's made intentionally for security - this action is not frequent and allowing doing it from some API makes potential "loophole" for some hacker to escalate their permissions
-
-modification of salon - can modify each property besides rating and reviewsCount (supposingly that it would be updated automatically via some other API which gathers reviews)
-
-I added endpoints for registering and loggin in because i assume that we don't want any user to be able to modify our records - only authenticated ones. for simplicity, only users who has role "ADMIN" can do it - in the future I would add possibility for business owner to modify info about their salons but it would require extra verification if person who claims to be business owner is actually that owner, but for this project this approach is enough. For authentication/authorization i use JWT.
-
-if you would like to modify backend and see results you can do it, but after changing you have to generate JAR from the level of folder `backend` using this command:
-```sh
-./gradlew bootJar
 ```
 
-and then you have to force Docker to rebuild containers:
-```sh
-docker compose up --build
+Run scraper:
+
+```bash
+cd salons_scraper
+scrapy crawl booksy_warsaw -a x_access_token="<TOKEN>" -a x_api_key="<API_KEY>"
 ```
 
-# frontend
-So Next.js was suggested technology, so I used it on frontend.
+Optional page range:
 
-
-## if used locally
-inside `frontend` folder:
-```sh
-npm i
+```bash
+scrapy crawl booksy_warsaw -a x_access_token="<TOKEN>" -a x_api_key="<API_KEY>" -a start_page=1 -a end_page=10
 ```
 
-## to show
-responsivness of frontend
+PowerShell note (if scripts are blocked):
 
-## to delete
-npx create-next-app@latest frontend --typescript
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
 
+## API Notes
+
+- Pagination is 1-based (`page=1` means first page)
+- Backend page size is fixed to 20
+- List endpoint returns min/max price derived from services
+- Update endpoint intentionally does not allow changing rating/reviews count
+
+## Design / Product Decisions
+
+- Booksy was chosen because it provided richer structured salon data than basic Google Maps or other services.
+- Added JWT-based auth to protect data modification, even though auth was not strictly required by the base task.
+- Kept editing rights limited to admins for safer default behavior.
+- Frontend filters are reflected in URL query params for shareable links and simple server-side fetching.
+
+## What I Would Improve With More Time
+
+- Better validation and field normalization in scraper
+- Owner-verified edit workflow (instead of global admin-only edits)
+- Better error boundaries and observability (structured logs, metrics)
+- Automated tests (integration + E2E)
+- Production-grade deployment setup (reverse proxy/TLS, environment-specific configs)
+
+## Troubleshooting
+
+- If frontend shows server render error in Docker, rebuild after env changes:
+
+```bash
+docker compose up -d --build
+```
+
+- If needed, force rebuild frontend image:
+
+```bash
+docker compose build --no-cache frontend
+docker compose up -d frontend
+```
