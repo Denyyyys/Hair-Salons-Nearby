@@ -1,0 +1,185 @@
+{
+  "info": {
+    "_postman_id": "a67e17c9-d760-4c1d-bc86-7b449f4dd7c3",
+    "name": "SumUp",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "24626458"
+  },
+  "item": [
+    {
+      "name": "get all salons",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/salons",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "salons"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "Usta",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get specific salon",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/salons/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "salons",
+            ":id"
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": "240765"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "modify specific salon",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzgwMDc5MjE2LCJleHAiOjE3ODAxNjU2MTZ9.RNglThZgXb4OPQ0d8FAOmSBbY4iPbA1cNH_-nJrPhzkEfAl3awyxbQL5-KIh77OQ",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"booksyBusinessId\": 240765,\r\n    \"address\": \"Mikołaja Kopernika 5, Parter, 00-367, Warszawa, Śródmieście\",\r\n    \"description\": \"Hairdressing Salon\",\r\n    \"district\": \"Śródmieście\",\r\n    \"email\": \"krupchinskybureau@gmail.com\",\r\n    \"facebookLink\": \"\",\r\n    \"instagramLink\": \"https://www.instagram.com/brtlst.warsaw/\",\r\n    \"name\": \"BRTLST\",\r\n    \"phone\": \"577 712 389\",\r\n    \"rating\": 4.926739926739927,\r\n    \"reviewsCount\": 273,\r\n    \"minPrice\": 0,\r\n    \"maxPrice\": 3400,\r\n    \"services\": [\r\n        {\r\n            \"name\": \"Konsultacja fryzjerska\",\r\n            \"minPrice\": 0,\r\n            \"maxPrice\": 0\r\n        },\r\n        {\r\n            \"name\": \"Strzyżenie damskie\",\r\n            \"minPrice\": 250,\r\n            \"maxPrice\": 250\r\n        },\r\n        {\r\n            \"name\": \"Strzyżenie damskie\",\r\n            \"minPrice\": 350,\r\n            \"maxPrice\": 350\r\n        },\r\n        {\r\n            \"name\": \"Strzyżenie damskie\",\r\n            \"minPrice\": 500,\r\n            \"maxPrice\": 500\r\n        },\r\n        {\r\n            \"name\": \"Strzyżenie męskie\",\r\n            \"minPrice\": 250,\r\n            \"maxPrice\": 250\r\n        },\r\n        {\r\n            \"name\": \"Strzyżenie męskie\",\r\n            \"minPrice\": 350,\r\n            \"maxPrice\": 350\r\n        },\r\n        {\r\n            \"name\": \"Strzyżenie męskie\",\r\n            \"minPrice\": 500,\r\n            \"maxPrice\": 500\r\n        },\r\n        {\r\n            \"name\": \"Strzyżenie damskie\",\r\n            \"minPrice\": 150,\r\n            \"maxPrice\": 150\r\n        },\r\n        {\r\n            \"name\": \"Strzyżenie damskie\",\r\n            \"minPrice\": 200,\r\n            \"maxPrice\": 200\r\n        },\r\n        {\r\n            \"name\": \"Strzyżenie damskie\",\r\n            \"minPrice\": 250,\r\n            \"maxPrice\": 250\r\n        },\r\n        {\r\n            \"name\": \"Modelowanie brody\",\r\n            \"minPrice\": 150,\r\n            \"maxPrice\": 150\r\n        },\r\n        {\r\n            \"name\": \"Trwała\",\r\n            \"minPrice\": 600,\r\n            \"maxPrice\": 600\r\n        },\r\n        {\r\n            \"name\": \"Trwała\",\r\n            \"minPrice\": 800,\r\n            \"maxPrice\": 800\r\n        },\r\n        {\r\n            \"name\": \"Trwała\",\r\n            \"minPrice\": 1100,\r\n            \"maxPrice\": 1100\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 150,\r\n            \"maxPrice\": 150\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 400,\r\n            \"maxPrice\": 400\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 450,\r\n            \"maxPrice\": 450\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 500,\r\n            \"maxPrice\": 500\r\n        },\r\n        {\r\n            \"name\": \"Tonowanie\",\r\n            \"minPrice\": 400,\r\n            \"maxPrice\": 800\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 450,\r\n            \"maxPrice\": 850\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 500,\r\n            \"maxPrice\": 900\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 450,\r\n            \"maxPrice\": 850\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 500,\r\n            \"maxPrice\": 900\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 600,\r\n            \"maxPrice\": 1000\r\n        },\r\n        {\r\n            \"name\": \"Rozjaśnianie włosów\",\r\n            \"minPrice\": 1200,\r\n            \"maxPrice\": 2400\r\n        },\r\n        {\r\n            \"name\": \"Rozjaśnianie włosów\",\r\n            \"minPrice\": 1400,\r\n            \"maxPrice\": 2600\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 800,\r\n            \"maxPrice\": 1300\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 1000,\r\n            \"maxPrice\": 1600\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 1700,\r\n            \"maxPrice\": 3100\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 1900,\r\n            \"maxPrice\": 3400\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 1300,\r\n            \"maxPrice\": 2500\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 1600,\r\n            \"maxPrice\": 3100\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 750,\r\n            \"maxPrice\": 1300\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 800,\r\n            \"maxPrice\": 1500\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 500,\r\n            \"maxPrice\": 700\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 500,\r\n            \"maxPrice\": 700\r\n        },\r\n        {\r\n            \"name\": \"Koloryzacja i farbowanie włosów\",\r\n            \"minPrice\": 150,\r\n            \"maxPrice\": 150\r\n        },\r\n        {\r\n            \"name\": \"Stylizacja włosów\",\r\n            \"minPrice\": 250,\r\n            \"maxPrice\": 250\r\n        },\r\n        {\r\n            \"name\": \"Stylizacja włosów\",\r\n            \"minPrice\": 300,\r\n            \"maxPrice\": 300\r\n        },\r\n        {\r\n            \"name\": \"Stylizacja włosów\",\r\n            \"minPrice\": 300,\r\n            \"maxPrice\": 300\r\n        },\r\n        {\r\n            \"name\": \"Stylizacja włosów\",\r\n            \"minPrice\": 350,\r\n            \"maxPrice\": 350\r\n        },\r\n        {\r\n            \"name\": \"Regeneracja włosów\",\r\n            \"minPrice\": 300,\r\n            \"maxPrice\": 350\r\n        },\r\n        {\r\n            \"name\": \"Pielęgnacja włosów\",\r\n            \"minPrice\": 400,\r\n            \"maxPrice\": 520\r\n        },\r\n        {\r\n            \"name\": \"Pielęgnacja włosów\",\r\n            \"minPrice\": 300,\r\n            \"maxPrice\": 300\r\n        },\r\n        {\r\n            \"name\": \"Regeneracja włosów\",\r\n            \"minPrice\": 400,\r\n            \"maxPrice\": 520\r\n        },\r\n        {\r\n            \"name\": \"Pielęgnacja włosów\",\r\n            \"minPrice\": 400,\r\n            \"maxPrice\": 400\r\n        },\r\n        {\r\n            \"name\": \"Pielęgnacja włosów\",\r\n            \"minPrice\": 520,\r\n            \"maxPrice\": 520\r\n        },\r\n        {\r\n            \"name\": \"Pielęgnacja włosów\",\r\n            \"minPrice\": 350,\r\n            \"maxPrice\": 350\r\n        },\r\n        {\r\n            \"name\": \"Pielęgnacja włosów\",\r\n            \"minPrice\": 400,\r\n            \"maxPrice\": 400\r\n        },\r\n        {\r\n            \"name\": \"Pielęgnacja włosów\",\r\n            \"minPrice\": 140,\r\n            \"maxPrice\": 140\r\n        },\r\n        {\r\n            \"name\": \"Pielęgnacja włosów\",\r\n            \"minPrice\": 160,\r\n            \"maxPrice\": 160\r\n        },\r\n        {\r\n            \"name\": \"Pielęgnacja włosów\",\r\n            \"minPrice\": 150,\r\n            \"maxPrice\": 150\r\n        },\r\n        {\r\n            \"name\": \"Pielęgnacja włosów\",\r\n            \"minPrice\": 120,\r\n            \"maxPrice\": 160\r\n        },\r\n        {\r\n            \"name\": \"Makijaż okolicznościowy\",\r\n            \"minPrice\": 250,\r\n            \"maxPrice\": 250\r\n        },\r\n        {\r\n            \"name\": \"Laminacja brwi\",\r\n            \"minPrice\": 500,\r\n            \"maxPrice\": 500\r\n        },\r\n        {\r\n            \"name\": \"Makijaż okolicznościowy\",\r\n            \"minPrice\": 350,\r\n            \"maxPrice\": 350\r\n        },\r\n        {\r\n            \"name\": \"Architektura i geometria brwi\",\r\n            \"minPrice\": 180,\r\n            \"maxPrice\": 180\r\n        },\r\n        {\r\n            \"name\": \"Makijaż okolicznościowy\",\r\n            \"minPrice\": 400,\r\n            \"maxPrice\": 400\r\n        },\r\n        {\r\n            \"name\": \"Laminacja rzęs\",\r\n            \"minPrice\": 300,\r\n            \"maxPrice\": 300\r\n        },\r\n        {\r\n            \"name\": \"Makijaż okolicznościowy\",\r\n            \"minPrice\": 400,\r\n            \"maxPrice\": 400\r\n        },\r\n        {\r\n            \"name\": \"Laminacja brwi\",\r\n            \"minPrice\": 250,\r\n            \"maxPrice\": 250\r\n        },\r\n        {\r\n            \"name\": null,\r\n            \"minPrice\": 150,\r\n            \"maxPrice\": 150\r\n        },\r\n        {\r\n            \"name\": \"Makijaż okolicznościowy\",\r\n            \"minPrice\": 300,\r\n            \"maxPrice\": 300\r\n        },\r\n        {\r\n            \"name\": \"Makijaż okolicznościowy\",\r\n            \"minPrice\": 200,\r\n            \"maxPrice\": 200\r\n        },\r\n        {\r\n            \"name\": \"Nauka makijażu\",\r\n            \"minPrice\": 800,\r\n            \"maxPrice\": 800\r\n        },\r\n        {\r\n            \"name\": \"Architektura i geometria brwi\",\r\n            \"minPrice\": 150,\r\n            \"maxPrice\": 150\r\n        },\r\n        {\r\n            \"name\": \"Architektura i geometria brwi\",\r\n            \"minPrice\": 150,\r\n            \"maxPrice\": 150\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/salons/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "salons",
+            ":id"
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": "240765"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "register user",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"username\": \"admin\",\r\n    \"password\": \"secretpassword\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/register",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "login user",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"testuser\",\r\n    \"password\": \"secretpassword\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
