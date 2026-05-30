@@ -63,10 +63,15 @@ function formatRating(rating: number) {
   return Number(rating.toFixed(2));
 }
 
+function getString(value: string | undefined) {
+  return value ?? "";
+}
+
 export default async function Home({ searchParams }: HomePageProps) {
   const query = await searchParams;
 
-  const pageFromQuery = Number(query.page ?? "1");
+  const rawPage = query.page;
+  const pageFromQuery = Number(rawPage ?? "1");
   const currentPage =
     Number.isNaN(pageFromQuery) || pageFromQuery < 1 ? 1 : pageFromQuery;
 
@@ -88,45 +93,91 @@ export default async function Home({ searchParams }: HomePageProps) {
         Showing page {data.page} of {data.totalPages} ({data.totalItems} salons)
       </p>
 
+      <form
+        action="/"
+        method="GET"
+        className="mb-6 grid gap-3 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        <input
+          type="text"
+          name="name"
+          placeholder="Salon name"
+          defaultValue={getString(query.name)}
+          className="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-orange-500 dark:border-zinc-700 dark:bg-zinc-900"
+        />
+
+        <input
+          type="text"
+          name="district"
+          placeholder="District"
+          defaultValue={getString(query.district)}
+          className="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-orange-500 dark:border-zinc-700 dark:bg-zinc-900"
+        />
+
+        <input
+          type="text"
+          name="serviceType"
+          placeholder="Service type"
+          defaultValue={getString(query.serviceType)}
+          className="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-orange-500 dark:border-zinc-700 dark:bg-zinc-900"
+        />
+
+        <div className="flex gap-2">
+          <button
+            type="submit"
+            className="rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700"
+          >
+            Apply
+          </button>
+          <Link
+            href="/"
+            className="rounded-md border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+          >
+            Clear
+          </Link>
+        </div>
+      </form>
+
       {data.items.length === 0 ? (
         <p>No salons found.</p>
       ) : (
         <>
           <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {data.items.map((salon) => (
-              <article
-                key={salon.booksyBusinessId}
-                className="group flex min-h-64 flex-col rounded-xl border border-orange-200/80 bg-gradient-to-br from-orange-100 to-orange-200 p-5 shadow-[0_10px_30px_-18px_rgba(194,65,12,0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_38px_-16px_rgba(194,65,12,0.45)] dark:border-orange-800/60 dark:from-orange-900/60 dark:to-orange-950/60"
-              >
-                <div>
-                  <h2 className="text-lg font-semibold tracking-tight text-zinc-900 transition-colors group-hover:text-orange-700 dark:text-orange-100 dark:group-hover:text-orange-200">
-                    {salon.name}
-                  </h2>
+              <Link href={`/salons/${salon.booksyBusinessId}`} key={salon.booksyBusinessId}>
+                <article
+                  className="group flex min-h-64 flex-col rounded-xl border border-orange-200/80 bg-gradient-to-br from-orange-100 to-orange-200 p-5 shadow-[0_10px_30px_-18px_rgba(194,65,12,0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_38px_-16px_rgba(194,65,12,0.45)] dark:border-orange-800/60 dark:from-orange-900/60 dark:to-orange-950/60"
+                >
+                  <div>
+                    <h2 className="text-lg font-semibold tracking-tight text-zinc-900 transition-colors group-hover:text-orange-700 dark:text-orange-100 dark:group-hover:text-orange-200">
+                      {salon.name}
+                    </h2>
 
-                  <p className="mt-1 text-sm text-zinc-700 dark:text-orange-200/90">
-                    {salon.district}
-                  </p>
+                    <p className="mt-1 text-sm text-zinc-700 dark:text-orange-200/90">
+                      {salon.district}
+                    </p>
 
-                  <p className="mt-3 text-sm leading-relaxed text-zinc-800 dark:text-orange-100/90">
-                    {salon.address}
-                  </p>
-                </div>
-
-                <div className="mt-auto">
-                  <div className="mt-4 flex items-center gap-4 text-sm text-zinc-800 dark:text-orange-100/90">
-                    <span className="rounded-full bg-white/70 px-2 py-0.5 dark:bg-orange-900/40">
-                      Rating: {formatRating(salon.rating)}
-                    </span>
-                    <span className="rounded-full bg-white/70 px-2 py-0.5 dark:bg-orange-900/40">
-                      Reviews: {salon.reviewsCount}
-                    </span>
+                    <p className="mt-3 text-sm leading-relaxed text-zinc-800 dark:text-orange-100/90">
+                      {salon.address}
+                    </p>
                   </div>
 
-                  <p className="mt-3 text-sm font-semibold text-zinc-900 dark:text-orange-100">
-                    Price: {formatPriceRange(salon.minPrice, salon.maxPrice)}
-                  </p>
-                </div>
-              </article>
+                  <div className="mt-auto">
+                    <div className="mt-4 flex items-center gap-4 text-sm text-zinc-800 dark:text-orange-100/90">
+                      <span className="rounded-full bg-white/70 px-2 py-0.5 dark:bg-orange-900/40">
+                        Rating: {formatRating(salon.rating)}
+                      </span>
+                      <span className="rounded-full bg-white/70 px-2 py-0.5 dark:bg-orange-900/40">
+                        Reviews: {salon.reviewsCount}
+                      </span>
+                    </div>
+
+                    <p className="mt-3 text-sm font-semibold text-zinc-900 dark:text-orange-100">
+                      Price: {formatPriceRange(salon.minPrice, salon.maxPrice)}
+                    </p>
+                  </div>
+                </article>
+              </Link>
             ))}
           </section>
 
@@ -169,7 +220,8 @@ export default async function Home({ searchParams }: HomePageProps) {
             )}
           </nav>
         </>
-      )}
-    </main>
+      )
+      }
+    </main >
   );
 }
