@@ -84,7 +84,7 @@ Authorization model:
 ## 1) Prerequisites
 
 - Docker + Docker Compose installed
-- Create `.env` in repository root (for quick local setup you can copy `.env.dev`)
+- Create `.env` in repository root (for quick local setup you can copy content from `.env.dev`)
 
 Required env values:
 - `MONGO_INITDB_ROOT_USERNAME`
@@ -105,11 +105,27 @@ Services:
 - Backend: `http://localhost:8085`
 - Mongo Express: `http://localhost:8081`
 
-## 3) Run scraper manually
+## 3) Seed database from dump (optional)
 
-Scraper is run manually, not by compose.
+If you want to start with pre-collected data, restore the Mongo dump after the stack is running.
 
-1. Ensure MongoDB is running (from compose)
+From repository root:
+
+```bash
+docker exec -i mongodb mongorestore \
+  --username "$MONGO_INITDB_ROOT_USERNAME" \
+  --password "$MONGO_INITDB_ROOT_PASSWORD" \
+  --authenticationDatabase admin \
+  --archive --gzip < seed-data/salons-and-users.archive.gz
+```
+
+`$MONGO_INITDB_ROOT_USERNAME` and `$MONGO_INITDB_ROOT_PASSWORD` should match the values you set in your root `.env` file.
+
+## 4) Run scraper manually
+
+Scraper is run manually (outside Docker Compose), so Python must be installed locally.
+
+1. Ensure MongoDB is running via Docker Compose, because the scraper writes fetched data directly to the database.
 2. In new terminal:
 
 ```bash
@@ -150,6 +166,38 @@ Optional page range:
 ```bash
 scrapy crawl booksy_warsaw -a x_access_token="<TOKEN>" -a x_api_key="<API_KEY>" -a start_page=1 -a end_page=10
 ```
+
+How to get `x_access_token` and `x_api_key`:
+
+1. Create a Booksy account and sign in.
+2. Open any single salon page in Chrome (example: `https://booksy.com/pl-pl/98898_cocospa_fryzjer_3_warszawa`).
+3. Open DevTools -> `Network`.
+4. Refresh the page so requests are captured.
+5. Filter requests by:
+   - `https://pl.booksy.com/core/v2/customer_api/businesses/`
+   ![Booksy Network filter](readme-assets/booksy-network-filter.png)
+6. Open a matching request (the business id in this request path corresponds to the salon id from page URL).
+7. In `Headers`, copy:
+   - `X-Access-Token`
+   - `X-Api-Key`
+   ![Booksy request headers](readme-assets/booksy-request-headers.png)
+8. Run scraper with those values.
+
+Example:
+
+```bash
+scrapy crawl booksy_warsaw -a x_access_token="someAccessToken" -a x_api_key="web-some-api-key" -a start_page=1 -a end_page=10
+```
+
+Note:
+- Header values in screenshots should be redacted for privacy.
+- Without logged-in session headers, Booksy responses may miss important fields such as phone/email.
+
+Suggested location for README-only screenshots:
+- `readme-assets/` at repository root (better than generic `docs/` for this use case)
+- example names:
+  - `readme-assets/booksy-network-filter.png`
+  - `readme-assets/booksy-request-headers.png`
 
 PowerShell note (if scripts are blocked):
 
