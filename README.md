@@ -9,6 +9,12 @@ This repository contains a full working application with:
 
 The project is focused on Warsaw hair/beauty salons and covers the flow end-to-end: scrape -> store -> expose API -> browse and edit in UI.
 
+## Project Walkthrough Video
+
+I recorded a short walkthrough where I explain the most interesting implementation details in more depth:
+
+- https://youtu.be/I0jIn95kxFI
+
 ## Stack
 
 - Data collection: `Python`, `Scrapy`, `PyMongo`
