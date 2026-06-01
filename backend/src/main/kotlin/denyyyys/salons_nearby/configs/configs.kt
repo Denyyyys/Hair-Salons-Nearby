@@ -23,6 +23,11 @@ class SecurityConfig(private val jwtAuthenticationFilter: JwtAuthenticationFilte
             .authorizeHttpRequests {
 
                 it.requestMatchers(
+                    HttpMethod.OPTIONS,
+                    "/**"
+                ).permitAll()
+                
+                it.requestMatchers(
                     "/api/auth/login",
                     "/api/auth/register"
                 ).permitAll()
