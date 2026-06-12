@@ -196,14 +196,8 @@ scrapy crawl booksy_warsaw -a x_access_token="someAccessToken" -a x_api_key="web
 ```
 
 Note:
-- Header values in screenshots should be redacted for privacy.
+- Header values in screenshots are redacted for privacy.
 - Without logged-in session headers, Booksy responses may miss important fields such as phone/email.
-
-Suggested location for README-only screenshots:
-- `readme-assets/` at repository root (better than generic `docs/` for this use case)
-- example names:
-  - `readme-assets/booksy-network-filter.png`
-  - `readme-assets/booksy-request-headers.png`
 
 PowerShell note (if scripts are blocked):
 
